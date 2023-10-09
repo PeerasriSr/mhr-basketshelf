@@ -1,0 +1,135 @@
+.empty {
+  color: #51555b;
+  background-color: #d6dde0;
+}
+
+.full {
+  color: white;
+  background-color: #446fa0;
+}
+
+.gridDB {
+  display: grid;
+  grid-template-columns: auto 33.33%;
+  column-gap: 8px;
+}
+
+.white {
+  color: white;
+}
+
+.numIndex {
+  font-size: 2rem;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #51555b;
+  // text-align: center;
+  // width: 20px;
+  // padding-top: 6px;
+  font-weight: bold;
+}
+
+.spIndex {
+  margin: 0;
+  font-size: 3.75rem;
+  font-weight: bold;
+}
+
+.spText {
+  //   font-size: 2.25rem;
+  font-size: 1.25rem;
+}
+
+table {
+  width: 100%;
+  //   border-radius: 0.25rem;
+}
+
+// .listCheck {
+//   background-color: #223c60;
+// }
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 2px;
+}
+
+td.mat-cell:first-of-type {
+  padding-left: 8px;
+}
+td.mat-cell:last-of-type {
+  padding-right: 8px;
+}
+
+h1 {
+  margin: 0 0 8px !important;
+}
+
+.input-group-text {
+  background-color: white !important;
+}
+
+.centered-input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // height: 100vh; /* Adjust this if you want to control the vertical centering */
+}
+
+.listArea {
+  // background-color: white;
+  // height: 295.99px;
+
+  // max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkInHead {
+  background-color: #027165;
+}
+
+.checkInBody {
+  .mat-cell {
+    font-size: 1.1rem;
+  }
+  background-color: #e8fffc;
+}
+
+.checkOutHead {
+  background-color: #b23c3c;
+}
+
+.checkOutBody {
+  .mat-cell {
+    font-size: 1.1rem;
+  }
+  background-color: #f6e4e4;
+}
+
+.event-in {
+  color: #fff;
+  background-color: #027165;
+  // background-color: #F9E9D0;
+}
+.event-in .mat-cell {
+  color: #fff;
+  background-color: #03beaa;
+}
+
+.event-out {
+  // color: #f0a160;
+  background-color: #b23c3c;
+  // background-color: #F9E9D0;
+}
+.event-out .mat-cell {
+  color: #fff;
+  background-color: #ce6e6e;
+}
+
+.classBarcode {
+  background-color: #2d4969;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}

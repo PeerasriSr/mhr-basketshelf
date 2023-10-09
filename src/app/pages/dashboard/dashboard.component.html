@@ -1,0 +1,278 @@
+<div class="spinner-container" *ngIf="isLoading">
+  <div class="backdrop"></div>
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container-fluid">
+  <div class="">
+    <div class="grid-container gridDB">
+      <div class="card" style="background: #51555b">
+        <div class="grid-item">
+          <div *ngFor="let tile of listStorages">
+            <mat-grid-list
+              cols="{{ tile.numCol }}"
+              rowHeight="{{ rowHeight }}"
+              gutterSize="4px"
+            >
+              <mat-grid-tile
+                [ngStyle]="{ 'border-radius': '8px' }"
+                *ngFor="let sp of tile.spaces"
+                [colspan]="1"
+                [rowspan]="1"
+                class="{{
+                  sp.spaceID === spEvent
+                    ? highlight
+                      ? oderEvent === 'in'
+                        ? 'event-in'
+                        : 'event-out'
+                      : 'empty'
+                    : sp.spaceStatus === 'Y'
+                    ? 'empty'
+                    : 'full'
+                }}"
+                style="text-align: center; vertical-align: middle"
+              >
+                <div *ngIf="sp.spaceStatus === 'Y'">
+                  <p class="spIndex">{{ sp.index }}</p>
+                </div>
+                <div *ngIf="sp.spaceStatus === 'N'">
+                  <span class="numIndex"> {{ sp.index }}</span>
+                  <p class="spText">{{ sp.patientQN }}</p>
+                  <p class="spText">{{ sp.patientName }}</p>
+                  <p class="spText m-0">{{ sp.patientNO }}</p>
+                </div>
+                <!-- <div *ngIf="sp.spaceStatus != 'N' && sp.spaceStatus != 'Y'">
+                  Display
+                </div> -->
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <div class="card checkInHead">
+          <div class="center white"><h1>Check In</h1></div>
+          <div class="listArea checkInBody" [style.height.px]="tableHeight">
+            <!-- <table
+                mat-table
+                [dataSource]="dataCheckIn"
+                class="mat-elevation checkInBody"
+              >
+                <ng-container matColumnDef="patientQN">
+                  <th mat-header-cell *matHeaderCellDef>คิว</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientQN }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="patientNO">
+                  <th mat-header-cell *matHeaderCellDef>HN</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientNO }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="patientName">
+                  <th mat-header-cell *matHeaderCellDef>ชื่อ-สกุล</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientName }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef>ตำแหน่ง</th>
+                  <td mat-cell *matCellDef="let element" class="center">
+                    {{ element.index }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="isTime">
+                  <th mat-header-cell *matHeaderCellDef>เวลา</th>
+                  <td mat-cell *matCellDef="let element" class="center">
+                    {{ element.isTime }}
+                  </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedCheckIn"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedCheckIn; let i = index"
+                  class="{{
+                    oderEvent === 'in' && i === 0 && highlight ? 'event' : ''
+                  }}"
+                ></tr>
+              </table> -->
+            <table
+              mat-table
+              [dataSource]="dataCheckIn"
+              class="mat-elevation checkInBody"
+            >
+              <ng-container matColumnDef="patientQN">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientQN }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="patientNO">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientNO }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="patientName">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="index">
+                <td mat-cell *matCellDef="let element" class="">
+                  <b
+                    ><i class="fas fa-angle-double-right"></i>
+                    {{ element.index }}</b
+                  >
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="isTime">
+                <td mat-cell *matCellDef="let element" class="">
+                  {{ element.isTime }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedCheckIn; let i = index"
+                class="{{
+                  oderEvent === 'in' && i === 0 && highlight ? 'event-in' : ''
+                }}"
+              ></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="card classBarcode">
+          <div class="centered-input-group">
+            <div class="input-group" style="width: 12.5rem">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="HN : "
+                aria-label="scan barcode"
+                aria-describedby="basic-addon2"
+                #swiper
+                (keyup.enter)="readHn(swiper.value); swiper.value = ''"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2"
+                  ><i class="fas fa-barcode"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card checkOutHead">
+          <div class="center white"><h1>Check Out</h1></div>
+          <div class="listArea checkOutBody" [style.height.px]="tableHeight">
+            <!-- <table
+                mat-table
+                [dataSource]="dataCheckOut"
+                class="mat-elevation checkOutBody"
+              >
+                <ng-container matColumnDef="patientQN">
+                  <th mat-header-cell *matHeaderCellDef>คิว</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientQN }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="patientNO">
+                  <th mat-header-cell *matHeaderCellDef>HN</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientNO }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="patientName">
+                  <th mat-header-cell *matHeaderCellDef>ชื่อ-สกุล</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.patientName }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef>ตำแหน่ง</th>
+                  <td mat-cell *matCellDef="let element" class="center">
+                    {{ element.index }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="isTime">
+                  <th mat-header-cell *matHeaderCellDef>เวลา</th>
+                  <td mat-cell *matCellDef="let element" class="center">
+                    {{ element.isTime }}
+                  </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedCheckOut"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedCheckOut; let i = index"
+                  class="{{
+                    oderEvent === 'out' && i === 0 && highlight ? 'event' : ''
+                  }}"
+                ></tr>
+              </table> -->
+            <table
+              mat-table
+              [dataSource]="dataCheckOut"
+              class="mat-elevation checkOutBody"
+            >
+              <ng-container matColumnDef="patientQN">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientQN }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="patientNO">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientNO }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="patientName">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.patientName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="index">
+                <td mat-cell *matCellDef="let element" class="">
+                  <b
+                    >{{ element.index }}
+                    <i class="fas fa-angle-double-right"></i
+                  ></b>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="isTime">
+                <td mat-cell *matCellDef="let element" class="">
+                  {{ element.isTime }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedCheckOut; let i = index"
+                class="{{
+                  oderEvent === 'out' && i === 0 && highlight ? 'event-out' : ''
+                }}"
+              ></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

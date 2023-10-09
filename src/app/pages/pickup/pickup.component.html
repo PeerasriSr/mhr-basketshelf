@@ -1,0 +1,181 @@
+<div class="spinner-container" *ngIf="isLoading">
+  <div class="backdrop"></div>
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container-fluid">
+  <div class="card" *ngIf="!orderDetial">
+    <div>
+      <mat-form-field
+        class="example-form-field"
+        style="float: left; padding: 0; width: 240px"
+      >
+        <mat-date-range-input
+          [formGroup]="campaign"
+          [rangePicker]="campaignPicker"
+          [comparisonStart]="campaign.value.start"
+          [comparisonEnd]="campaign.value.end"
+        >
+          <input
+            matStartDate
+            placeholder="วันที่ เริ่มต้น"
+            formControlName="start"
+            (dateChange)="startChange($event)"
+          />
+          <input
+            matEndDate
+            placeholder="สิ้นสุด"
+            formControlName="end"
+            (dateChange)="endChange($event)"
+          />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="campaignPicker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #campaignPicker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <hr />
+    <div>
+      <table
+        mat-table
+        [dataSource]="dataPickup"
+        #sortPickup="matSort"
+        matSort
+        class=""
+        matSortActive=""
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="checkInDT">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>วันที่</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.checkInDT | slice : 0 : 10 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="patientQN">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>คิว</th>
+          <td mat-cell *matCellDef="let element" class="">
+            {{ element.patientQN }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="patientNO">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>HN</th>
+          <td mat-cell *matCellDef="let element" class="">
+            {{ element.patientNO }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="patientName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อ - สกุล</th>
+          <td mat-cell *matCellDef="let element" class="">
+            {{ element.patientName }}
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedPickup; sticky: true"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedPickup; let element"
+          class="pointer"
+          (click)="getOrder(element)"
+        ></tr>
+      </table>
+      <mat-paginator
+        #paginatorPickup="matPaginator"
+        style="display: flex; justify-content: center"
+        [length]="10"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 25, 50]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+  <div class="card" *ngIf="orderDetial">
+    <i class="fas fa-arrow-left pointer" (click)="back()"></i>
+    เลขที่ {{ orderDetial.prescriptionno }} วันที่
+    {{ orderDetial.takedate }} คิว {{ orderDetial.queue }} HN
+    {{ orderDetial.hn }} ชื่อ {{ orderDetial.patientname }} สิทธิบัตร
+    {{ orderDetial.rightname }}
+    <hr />
+    <div>
+      <table
+        mat-table
+        [dataSource]="dataOrder"
+        #sortOrder="matSort"
+        matSort
+        class=""
+        matSortActive=""
+        matSortDirection="asc"
+      >
+        <ng-container matColumnDef="seq">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ลำดับ</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.seq }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="orderitemname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>รายการยา</th>
+          <td mat-cell *matCellDef="let element" class="">
+            {{ element.orderitemname }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="freetext1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            วิธีใช้ หน่วย เวลา
+          </th>
+          <td mat-cell *matCellDef="let element" class="">
+            {{ element.freetext1 }} {{ element.freetext2 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="orderqty">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>จำนวนจ่าย</th>
+          <td mat-cell *matCellDef="let element" class="right">
+            <b>{{ element.orderqty }}</b> {{ element.orderunitcode }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>จำนวนเงิน</th>
+          <td mat-cell *matCellDef="let element" class="right">
+            {{ element.price }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="img">
+          <th mat-header-cell *matHeaderCellDef>รูปยา</th>
+          <td mat-cell *matCellDef="let element" class="center">
+            <img
+              *ngIf="element.img"
+              [src]="element.img"
+              alt="รูปภาพ"
+              (click)="viewImg(element)"
+              style="cursor: pointer"
+            />
+
+            <span
+              class="material-icons"
+              style="font-size: 3.625em; color: lightgrey"
+              *ngIf="!element.img"
+            >
+              add_a_photo
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedOrder; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedOrder"></tr>
+      </table>
+      <mat-paginator
+        #paginatorOrder="matPaginator"
+        style="display: flex; justify-content: center"
+        [length]="10"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 25, 50]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+* {
+  font-size: 1rem;
+}
+
+html {
+  font-size: calc(60% + 0.8vmin) !important;
+}
+
+html,
+body {
+  height: 100%;
+  // background: #51555b;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+.container-fluid {
+  padding: 8px;
+}
+
+.card {
+  padding: 8px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+span {
+  padding: 0px;
+}
+
+.spinner-container {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.backdrop {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.pointer:hover {
+  color: lightgrey;
+}
+
+.edit {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.edit:hover {
+  color: lightgrey;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-cell {
+  font-size: 1rem;
+  max-width: 200px;
+}
+
+// th.mat-header-cell {
+//   text-align: center !important;
+// }
